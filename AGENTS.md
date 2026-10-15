@@ -2,10 +2,10 @@
 
 ## Approval and scope
 
-- Ask the user for explicit approval before starting each new small development task, including documentation tasks. Approval for a phase does not automatically authorize all its tasks.
-- Describe the task ID, scope, acceptance criteria, and planned verification before approval.
-- Complete edits and fixes necessary for the approved task without repeatedly asking about routine implementation details.
-- Do not start the next task without approval. Do not install dependencies or implement application code under a planning-only task.
+- The user revised the workflow on 2026-10-15: take responsibility for routine technical decisions and progress through the agreed roadmap without asking for every task.
+- State the task scope and verification plan, then implement, test, document, commit, and create task PRs autonomously.
+- Ask only for consequential missing decisions such as material scope changes, paid services, real employee data handling, destructive actions, or production changes. Honor tool-enforced permission boundaries.
+- Keep work incremental and explain completed milestones. This is not permission to generate the entire product in one unreviewable change.
 - User instructions take precedence over these project defaults.
 
 ## Teaching and communication
@@ -19,7 +19,7 @@
 - Inspect the working tree before changes; preserve existing user work.
 - Use a focused `codex/DF-NNN-description` branch and a small local commit for each approved task. Do not amend or rewrite previous commits unless authorized.
 - Stage specific task files. Never commit credentials, private employee data, generated dependency directories, or local environment secrets.
-- Remote push, PR, and merge behavior is pending agreement. Do not infer that a local commit authorizes those actions.
+- Routine task branch pushes and PR creation are authorized. Keep PRs unmerged unless merge authorization is established; the earlier separate-merge preference remains in effect.
 - Do not mark a task as merged or released merely because it is committed locally.
 
 ## Engineering constraints

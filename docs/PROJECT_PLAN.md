@@ -14,7 +14,7 @@ Organization owner, administrator, HR/operations, project manager, team lead, de
 2. **Portfolio release:** extend the core with sprints, transparent attendance and worklogs, leave, async collaboration, GitHub data, deterministic risks, dashboards, wellbeing preferences, and a read-only AI analyst. Include synthetic demo data, tests, CI, documentation, and deployment where free infrastructure permits.
 3. **Company pilot gate:** review access isolation, retention/deletion, backup restoration, monitoring, capacity, incident handling, and actual hosting limitations before processing real employee data. Portfolio completion alone does not establish production readiness.
 
-The original requirements remain the long-term scope. They are not permission to implement every phase immediately.
+The original requirements remain the long-term scope. Implement them incrementally under the user's updated authorization for routine progress, with focused tasks and meaningful milestone reports.
 
 ## Architecture direction
 
@@ -45,7 +45,7 @@ Use free services initially. Recheck current quotas, availability, retention, an
 - Exact compatible dependency versions and package-manager configuration.
 - Authentication library/session approach and deployment cookie topology.
 - Local database approach, email provider, file storage, hosting, and AI provider.
-- GitHub push/PR/merge approval workflow and branch protection availability.
+- Merge authorization and branch protection availability. Routine task pushes and PRs are authorized; see the workflow record.
 - Weekly time budget and target date; no completion date has been promised.
 
 ## Completion standard
