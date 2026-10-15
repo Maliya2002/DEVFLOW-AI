@@ -10,9 +10,17 @@
   },
   "workspaces": ["apps/*"],
   "scripts": {
-    "typecheck": "npm run typecheck --workspaces"
+    "typecheck": "npm run typecheck --workspaces",
+    "build:api": "npm run build --workspace @devflow/api",
+    "start:api": "npm run start --workspace @devflow/api",
+    "test:api": "npm run test --workspace @devflow/api"
   },
   "devDependencies": {
     "typescript": "7.0.2"
+  },
+  "overrides": {
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "4.3.2"
+    }
   }
 }

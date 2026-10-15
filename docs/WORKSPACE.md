@@ -1,5 +1,7 @@
 # DF-002: workspace foundation
 
+This document records the DF-002 milestone. DF-003 subsequently adds the API, build, and tests; see [the API guide](API.md) for current backend commands. Statements about empty workspaces below describe DF-002, not the current API.
+
 ## Scope
 
 Set up npm workspaces, a pinned TypeScript compiler, reproducible dependency resolution, shared compiler settings, and ignore rules. NestJS scaffolding is DF-003; Next.js scaffolding is DF-004. No running application is claimed here.

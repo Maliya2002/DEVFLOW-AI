@@ -2,7 +2,7 @@
 
 A planned remote software-team platform connecting project delivery, transparent work records, collaboration, GitHub workflows, and evidence-grounded insights.
 
-**Status:** TypeScript workspace foundation. Frontend and API directories are reserved; there is no running web application or database yet.
+**Status:** NestJS API foundation with a tested liveness endpoint. The frontend directory is reserved; there is no web UI or database yet.
 
 The first goal is a working job-portfolio release. A later company pilot requires separate operational and security verification before using real employee data.
 
@@ -13,6 +13,7 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [Development and Git workflow](docs/WORKFLOW.md)
 - [Initial environment inspection](docs/ENVIRONMENT.md)
 - [Workspace setup and dependency decisions](docs/WORKSPACE.md)
+- [API setup and request-flow explanation](docs/API.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)
 
@@ -29,7 +30,14 @@ npm ci --ignore-scripts
 npm run typecheck
 ```
 
-The check currently validates the two workspace configurations and empty declaration modules, not application behavior. There are no dev servers, application tests, or production build commands yet. See the workspace guide for the file-by-file explanation.
+The API contains application code; the frontend still contains only an empty declaration module. To build, test, and run the API:
+
+```sh
+npm run test:api
+npm run start:api
+```
+
+The test command builds the API first. Visit `http://127.0.0.1:3001/api/v1/health` for its liveness response. To build without tests, use `npm run build:api`. See the API guide for configuration and limitations.
 
 Development targets an 8 GB Windows computer and initially uses free services. Redis and background workers will be added when a feature needs them. Docker is not required for every local development session.
 
@@ -39,4 +47,4 @@ Sign in, join an organization, create and assign a project task, and update that
 
 ## Working agreement
 
-Obtain explicit user approval before each small development task. Explain changes step by step, run relevant checks, and make a focused local Git commit. Pushes, pull requests, and merges require an agreed remote workflow. See the development workflow for details.
+Following the user's updated instruction, progress autonomously through routine tasks, explain changes step by step, run relevant checks, and make focused commits and task PRs. Ask only for consequential decisions or required permissions. Keep PRs unmerged until merge authorization is established. See the development workflow for details.
