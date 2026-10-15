@@ -44,3 +44,7 @@ Result, limitations, branch, and commit:
 ## Explanations
 
 At completion, explain the relevant files, request/data flow, new concepts, commands actually run, and how the user can verify the result. Keep each task small enough to understand and review.
+
+## Approval record: 2026-10-15
+
+The user approved DF-002 and the DF-001 push/PR. DF-001 is published as [PR #1](https://github.com/Maliya2002/DEVFLOW-AI/pull/1), without merging. DF-002 uses a dependent local branch starting at DF-001 commit `ec13221`, keeping main unchanged. The combined approval is interpreted as permission to continue from that reviewed planning baseline, not permission to merge it. DF-002 push/PR and merges still require approval; no standing remote authorization is implied.

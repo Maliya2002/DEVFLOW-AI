@@ -1,0 +1,18 @@
+{
+  "name": "devflow-ai",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Remote engineering team platform",
+  "packageManager": "npm@11.18.0",
+  "engines": {
+    "node": ">=24.18.0 <25",
+    "npm": ">=11.18.0 <12"
+  },
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

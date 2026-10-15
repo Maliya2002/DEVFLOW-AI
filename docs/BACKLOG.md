@@ -1,13 +1,13 @@
 # Incremental backlog
 
-Only DF-001 is approved. Every subsequent row requires its own approval. Larger later modules will be split into small acceptance-driven tasks before implementation.
+DF-001 and DF-002 are approved. Every subsequent row requires its own approval. Larger later modules will be split into small acceptance-driven tasks before implementation.
 
 ## Planning and foundation
 
 | ID | Task | Dependency | Status |
 | --- | --- | --- | --- |
-| DF-001 | Inspect repository/tools; record scope, workflow, and backlog | None | Completed on task branch; not pushed or merged |
-| DF-002 | Verify compatible versions; initialize minimal TypeScript workspace, lockfile, and ignore rules | DF-001; agree branch/remote workflow | Proposed |
+| DF-001 | Inspect repository/tools; record scope, workflow, and backlog | None | Completed; pushed; PR #1 open, not merged |
+| DF-002 | Verify compatible versions; initialize minimal TypeScript workspace, lockfile, and ignore rules | DF-001 | Completed on dependent local branch; not pushed or merged |
 | DF-003 | Scaffold minimal NestJS API and health endpoint | DF-002 | Proposed |
 | DF-004 | Scaffold Next.js app and accessible base layout | DF-002 | Proposed |
 | DF-005 | Configure formatting, lint, type checks, and initial CI/build checks | DF-003, DF-004 | Proposed |
