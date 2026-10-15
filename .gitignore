@@ -1,0 +1,25 @@
+# Dependencies and generated output
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+playwright-report/
+test-results/
+.turbo/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+
+# Logs and scratch files
+*.log
+tmp/
+.cache/
+.DS_Store
+Thumbs.db
