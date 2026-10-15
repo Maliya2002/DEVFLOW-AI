@@ -8,7 +8,9 @@
     "node": ">=24.18.0 <25",
     "npm": ">=11.18.0 <12"
   },
-  "workspaces": ["apps/*"],
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
     "typecheck": "npm run typecheck --workspaces",
     "build:api": "npm run build --workspace @devflow/api",
@@ -17,10 +19,22 @@
     "dev:web": "npm run dev --workspace @devflow/web",
     "build:web": "npm run build --workspace @devflow/web",
     "start:web": "npm run start --workspace @devflow/web",
-    "test:web": "npm run test:e2e --workspace @devflow/web"
+    "test:web": "npm run test:e2e --workspace @devflow/web",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings=0",
+    "check": "npm run format:check && npm run lint && npm run typecheck",
+    "verify": "npm run check && npm run test:api && npm run build:web && npm run test:web"
   },
   "devDependencies": {
-    "typescript": "7.0.2"
+    "@eslint/js": "10.0.1",
+    "eslint": "10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2"
   },
   "overrides": {
     "@istanbuljs/load-nyc-config": {

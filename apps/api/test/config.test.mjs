@@ -9,8 +9,10 @@ describe('API port configuration', () => {
     expect(parsePort(value)).toBe(Number(value));
   });
 
-  it.each(['', ' ', '0', '-1', '65536', '3001x', '1.5', '1e3', 'Infinity'])
-    ('rejects invalid port %s', (value) => {
+  it.each(['', ' ', '0', '-1', '65536', '3001x', '1.5', '1e3', 'Infinity'])(
+    'rejects invalid port %s',
+    (value) => {
       expect(() => parsePort(value)).toThrow('PORT must be an integer');
-    });
+    },
+  );
 });

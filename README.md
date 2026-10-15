@@ -15,6 +15,7 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [Workspace setup and dependency decisions](docs/WORKSPACE.md)
 - [API setup and request-flow explanation](docs/API.md)
 - [Frontend setup, interactions, and design](docs/FRONTEND.md)
+- [Quality checks and CI](docs/QUALITY.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)
 
@@ -48,7 +49,17 @@ npm run dev:web
 
 Open `http://127.0.0.1:3000`. The overview works without the API. The Connection page reports availability of the real API; it reports unavailable if the API is stopped. For a production-mode local preview, run `npm run build:web` followed by `npm run start:web`.
 
-Browser tests require the compiled API and frontend plus a local supported browser. See the frontend guide for commands. There is no hosted deployment or CI workflow yet.
+Browser tests require the compiled API and frontend plus a local supported browser. See the frontend guide for commands. CI runs checks on pull requests and pushes to main; no hosted deployment is configured.
+
+## Quality commands
+
+```sh
+npm run format
+npm run check
+npm run verify
+```
+
+`format` rewrites supported source/config/document files. `check` verifies formatting, lint, and types without fixing files. `verify` adds API tests, a frontend production build, and browser tests; a Playwright browser must already be installed. See the quality guide for Windows Edge usage and the CI policy.
 
 Development targets an 8 GB Windows computer and initially uses free services. Redis and background workers will be added when a feature needs them. Docker is not required for every local development session.
 

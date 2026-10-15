@@ -8,10 +8,19 @@ export async function GET() {
       throw new Error('Invalid API origin');
     }
     const response = await fetch(new URL('/api/v1/health', origin), {
-      cache: 'no-store', signal: AbortSignal.timeout(2500), redirect: 'error',
+      cache: 'no-store',
+      signal: AbortSignal.timeout(2500),
+      redirect: 'error',
     });
     const body: unknown = response.ok ? await response.json() : null;
-    if (typeof body === 'object' && body !== null && 'status' in body && body.status === 'ok' && 'service' in body && body.service === 'devflow-api') {
+    if (
+      typeof body === 'object' &&
+      body !== null &&
+      'status' in body &&
+      body.status === 'ok' &&
+      'service' in body &&
+      body.service === 'devflow-api'
+    ) {
       return Response.json({ status: 'available' }, { headers });
     }
   } catch {

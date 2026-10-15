@@ -9,10 +9,20 @@ import { WorkspaceShell } from '@/components/workspace-shell';
 
 export const metadata: Metadata = {
   title: { default: 'Workspace overview | DevFlow AI', template: '%s | DevFlow AI' },
-  description: 'A thoughtful workspace for remote engineering teams. Coordinate work, protect focus, and build with clarity.',
+  description:
+    'A thoughtful workspace for remote engineering teams. Coordinate work, protect focus, and build with clarity.',
   robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return <html lang="en"><body><a className="skip-link" href="#main-content">Skip to main content</a><WorkspaceShell>{children}</WorkspaceShell></body></html>;
+  return (
+    <html lang="en">
+      <body>
+        <a className="skip-link" href="#main-content">
+          Skip to main content
+        </a>
+        <WorkspaceShell>{children}</WorkspaceShell>
+      </body>
+    </html>
+  );
 }
