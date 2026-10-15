@@ -2,7 +2,7 @@
 
 A planned remote software-team platform connecting project delivery, transparent work records, collaboration, GitHub workflows, and evidence-grounded insights.
 
-**Status:** NestJS API foundation with a tested liveness endpoint. The frontend directory is reserved; there is no web UI or database yet.
+**Status:** Next.js workspace explorer and NestJS liveness API. The frontend includes a responsive workbench, interactive capability map, and real service connection check. Authentication, database persistence, and business workflows are not implemented yet.
 
 The first goal is a working job-portfolio release. A later company pilot requires separate operational and security verification before using real employee data.
 
@@ -14,6 +14,7 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [Initial environment inspection](docs/ENVIRONMENT.md)
 - [Workspace setup and dependency decisions](docs/WORKSPACE.md)
 - [API setup and request-flow explanation](docs/API.md)
+- [Frontend setup, interactions, and design](docs/FRONTEND.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)
 
@@ -30,7 +31,7 @@ npm ci --ignore-scripts
 npm run typecheck
 ```
 
-The API contains application code; the frontend still contains only an empty declaration module. To build, test, and run the API:
+To build, test, and run the API:
 
 ```sh
 npm run test:api
@@ -38,6 +39,16 @@ npm run start:api
 ```
 
 The test command builds the API first. Visit `http://127.0.0.1:3001/api/v1/health` for its liveness response. To build without tests, use `npm run build:api`. See the API guide for configuration and limitations.
+
+In a second terminal, start the frontend:
+
+```sh
+npm run dev:web
+```
+
+Open `http://127.0.0.1:3000`. The overview works without the API. The Connection page reports availability of the real API; it reports unavailable if the API is stopped. For a production-mode local preview, run `npm run build:web` followed by `npm run start:web`.
+
+Browser tests require the compiled API and frontend plus a local supported browser. See the frontend guide for commands. There is no hosted deployment or CI workflow yet.
 
 Development targets an 8 GB Windows computer and initially uses free services. Redis and background workers will be added when a feature needs them. Docker is not required for every local development session.
 

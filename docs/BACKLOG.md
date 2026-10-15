@@ -8,8 +8,8 @@ The user has authorized autonomous routine progress through the agreed roadmap. 
 | --- | --- | --- | --- |
 | DF-001 | Inspect repository/tools; record scope, workflow, and backlog | None | Completed; pushed; PR #1 open, not merged |
 | DF-002 | Verify compatible versions; initialize minimal TypeScript workspace, lockfile, and ignore rules | DF-001 | Completed; PR #2 open, not merged |
-| DF-003 | Scaffold minimal NestJS API and health endpoint | DF-002 | Completed on task branch; see API guide for verification |
-| DF-004 | Scaffold Next.js app and accessible base layout | DF-002 | Proposed |
+| DF-003 | Scaffold minimal NestJS API and health endpoint | DF-002 | Completed; PR #3 open, not merged |
+| DF-004 | Scaffold Next.js app, distinctive interactive workbench, and accessible base layout | DF-003 | Completed on task branch; see frontend guide for verification |
 | DF-005 | Configure formatting, lint, type checks, and initial CI/build checks | DF-003, DF-004 | Proposed |
 | DF-006 | Select development PostgreSQL setup; configure validated environment and Prisma baseline | DF-003 | Proposed |
 | DF-007 | Document authentication/session design and permission matrix | DF-006 | Proposed |
