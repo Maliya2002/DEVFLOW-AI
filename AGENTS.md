@@ -24,6 +24,8 @@
 
 ## Engineering constraints
 
+- UI preference: the user explicitly rejected generic AI-looking SaaS hero/card layouts and requested distinctive, eye-catching, meaningful interactivity. Continue the narrow tool rail, dark frame, light drafting surface, cobalt selection, and contextual inspector direction. Preserve accessibility and clear planned-feature labels; never substitute fabricated data or inert buttons for functionality.
+
 - Target an 8 GB Windows development machine and free services initially. Avoid unnecessary always-running services.
 - Verify dependency compatibility and pin selected versions during setup; do not claim versions have been verified during planning.
 - Enforce organization and resource permissions in the backend, validate writes, and use database constraints and transactions where appropriate.
