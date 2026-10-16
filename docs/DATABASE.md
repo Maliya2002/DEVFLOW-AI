@@ -47,3 +47,5 @@ The first three commands work without Neon credentials (the optional live integr
 References: [Prisma client generator](https://www.prisma.io/docs/orm/v7/prisma-schema/overview/generators), [Prisma config](https://docs.prisma.io/docs/orm/v7/reference/prisma-config-reference), [Neon plans](https://neon.com/pricing).
 
 Local verification on 2026-10-16: dependency installation reported zero vulnerabilities; Prisma generation/schema validation, formatting, lint, and both workspace type checks passed. API tests passed 35 tests; the one live PostgreSQL test was explicitly skipped because TEST_DATABASE_URL was absent. Neon connectivity remains pending account/project configuration.
+
+GitHub Actions run 38855743478 passed for implementation commit a92178a: the real PostgreSQL integration test, API suite, frontend production build, dependency audit, and desktop/mobile Chromium suite all succeeded. This validates PostgreSQL integration, not a Neon cloud connection.
