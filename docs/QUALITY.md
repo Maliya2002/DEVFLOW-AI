@@ -58,3 +58,5 @@ References: [Next ESLint guidance](https://nextjs.org/docs/app/api-reference/con
 ## Verification record
 
 On 2026-10-15, a clean `npm ci --ignore-scripts` completed with zero reported vulnerabilities. `npm run verify` passed formatting, zero-warning lint, both TypeScript checks, 16 API tests, the production frontend build, and 20 desktop/mobile browser tests using installed Windows Edge. GitHub-hosted Chromium verification is recorded by the PR check; local success does not imply hosted CI success.
+
+GitHub Actions run 38768953546 for PR #5 also passed on Ubuntu with Chromium, including all quality checks, API tests, production build, dependency audit, and desktop/mobile browser tests. Confirmed on 2026-10-16 (Asia/Colombo).
