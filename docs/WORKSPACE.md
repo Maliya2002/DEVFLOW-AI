@@ -25,14 +25,14 @@ TypeScript checks JavaScript-like source against declared types before execution
 
 Public npm registry metadata was inspected on 2026-10-15 with `npm view`. Versions are observations on that date, not permanent recommendations.
 
-| Component | Observation / decision |
-| --- | --- |
-| Node.js | Installed 24.18.0; baseline pinned in `.nvmrc`, supported range restricted to Node 24 from that patch |
-| npm | Installed 11.18.0; recorded in `packageManager`, supported range 11.18.0 to below 12 |
-| TypeScript | Stable metadata version 7.0.2; requires Node >=16.20.0; pinned and installed in this task |
-| Next.js | Candidate 16.4.1 requires Node >=20.9.0; React peers include ^19.0.0; not installed yet |
-| NestJS core | Candidate 12.1.3 requires Node >=20; peers require compatible NestJS 12 packages, RxJS ^7.1.0 and reflect-metadata; not installed yet |
-| Prisma | `latest` resolved to prerelease 8.0.0-rc.23 and was not selected. Stable 7.10.0 metadata supports Node ^20.19, ^22.12 or >=24.0; defer selection to database setup |
+| Component   | Observation / decision                                                                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Node.js     | Installed 24.18.0; baseline pinned in `.nvmrc`, supported range restricted to Node 24 from that patch                                                              |
+| npm         | Installed 11.18.0; recorded in `packageManager`, supported range 11.18.0 to below 12                                                                               |
+| TypeScript  | Stable metadata version 7.0.2; requires Node >=16.20.0; pinned and installed in this task                                                                          |
+| Next.js     | Candidate 16.4.1 requires Node >=20.9.0; React peers include ^19.0.0; not installed yet                                                                            |
+| NestJS core | Candidate 12.1.3 requires Node >=20; peers require compatible NestJS 12 packages, RxJS ^7.1.0 and reflect-metadata; not installed yet                              |
+| Prisma      | `latest` resolved to prerelease 8.0.0-rc.23 and was not selected. Stable 7.10.0 metadata supports Node ^20.19, ^22.12 or >=24.0; defer selection to database setup |
 
 The installed Node satisfies these observed engine constraints. This establishes runtime eligibility, not full integration compatibility. Verify TypeScript/framework compiler APIs, peers, builds, and tests when installing each framework; adjust the compiler pin if those tests reveal incompatibility. No framework dependency set is locked by this task.
 

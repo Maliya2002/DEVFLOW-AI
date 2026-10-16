@@ -4,7 +4,9 @@ import type { ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 
 const styles = cva('button', {
-  variants: { variant: { primary: 'button-primary', secondary: 'button-secondary', quiet: 'button-quiet' } },
+  variants: {
+    variant: { primary: 'button-primary', secondary: 'button-secondary', quiet: 'button-quiet' },
+  },
   defaultVariants: { variant: 'primary' },
 });
 

@@ -16,7 +16,7 @@ npm run start:api
 Open `http://127.0.0.1:3001/api/v1/health`:
 
 ```json
-{"status":"ok","service":"devflow-api"}
+{ "status": "ok", "service": "devflow-api" }
 ```
 
 This public endpoint reports API liveness only. It does not claim database connectivity, dependency readiness, authentication, or production readiness. It returns no secrets or internal infrastructure details and has `Cache-Control: no-store`.
