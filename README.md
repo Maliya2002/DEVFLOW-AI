@@ -16,6 +16,7 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [API setup and request-flow explanation](docs/API.md)
 - [Frontend setup, interactions, and design](docs/FRONTEND.md)
 - [Quality checks and CI](docs/QUALITY.md)
+- [Neon database setup and Prisma](docs/DATABASE.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)
 

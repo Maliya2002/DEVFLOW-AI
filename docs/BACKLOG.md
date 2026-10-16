@@ -11,7 +11,7 @@ The user has authorized autonomous routine progress through the agreed roadmap. 
 | DF-003 | Scaffold minimal NestJS API and health endpoint                                                 | DF-002         | Completed; PR #3 open, not merged            |
 | DF-004 | Scaffold Next.js app, distinctive interactive workbench, and accessible base layout             | DF-003         | Completed; PR #4 open, not merged            |
 | DF-005 | Configure formatting, lint, type checks, and initial CI/build checks                            | DF-003, DF-004 | Completed; PR #5 open, CI passed, not merged |
-| DF-006 | Select development PostgreSQL setup; configure validated environment and Prisma baseline        | DF-003         | Proposed                                     |
+| DF-006 | Select development PostgreSQL setup; configure validated environment and Prisma baseline        | DF-003         | Implemented; CI and Neon connection pending  |
 | DF-007 | Document authentication/session design and permission matrix                                    | DF-006         | Proposed                                     |
 | DF-008 | Implement organization and membership persistence with isolation checks                         | DF-007         | Proposed                                     |
 | DF-009 | Implement registration and password hashing with tests                                          | DF-008         | Proposed                                     |

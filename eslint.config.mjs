@@ -16,6 +16,7 @@ export default defineConfig([
     '**/test-results/**',
     '**/next-env.d.ts',
     'tmp/**',
+    'apps/api/src/generated/**',
     '.cache/**',
   ]),
   {
