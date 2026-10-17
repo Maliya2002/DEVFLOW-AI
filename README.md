@@ -19,6 +19,7 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [Neon database setup and Prisma](docs/DATABASE.md)
 - [Authentication and session design](docs/AUTHENTICATION.md)
 - [Organization permission matrix](docs/AUTHORIZATION.md)
+- [Identity and organization persistence](docs/IDENTITY_PERSISTENCE.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)
 

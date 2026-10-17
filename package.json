@@ -27,7 +27,9 @@
     "verify": "npm run check && npm run test:api && npm run build:web && npm run test:web",
     "db:generate": "npm run db:generate --workspace @devflow/api",
     "db:validate": "npm run db:validate --workspace @devflow/api",
-    "db:check": "npm run db:check --workspace @devflow/api"
+    "db:check": "npm run db:check --workspace @devflow/api",
+    "db:deploy": "npm run db:deploy --workspace @devflow/api",
+    "db:status": "npm run db:status --workspace @devflow/api"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
