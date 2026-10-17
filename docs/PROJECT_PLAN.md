@@ -42,9 +42,9 @@ Use free services initially. Recheck current quotas, availability, retention, an
 
 ## Open decisions
 
-- Exact compatible dependency versions and package-manager configuration.
-- Authentication library/session approach and deployment cookie topology.
-- Local database approach, email provider, file storage, hosting, and AI provider.
+- Feature-specific dependency versions; the workspace baseline is pinned and verified.
+- Authentication design is selected in [AUTHENTICATION.md](AUTHENTICATION.md); HTTPS hosting must satisfy its same-origin cookie topology. Implementation starts in DF-008 onward.
+- Neon PostgreSQL is configured and verified. Email provider, file storage, hosting and AI provider remain open.
 - Merge authorization and branch protection availability. Routine task pushes and PRs are authorized; see the workflow record.
 - Weekly time budget and target date; no completion date has been promised.
 

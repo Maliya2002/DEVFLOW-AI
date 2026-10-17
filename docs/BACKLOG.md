@@ -12,7 +12,7 @@ The user has authorized autonomous routine progress through the agreed roadmap. 
 | DF-004 | Scaffold Next.js app, distinctive interactive workbench, and accessible base layout             | DF-003         | Completed; PR #4 open, not merged            |
 | DF-005 | Configure formatting, lint, type checks, and initial CI/build checks                            | DF-003, DF-004 | Completed; PR #5 open, CI passed, not merged |
 | DF-006 | Select development PostgreSQL setup; configure validated environment and Prisma baseline        | DF-003         | Completed; PR #6 open; CI and Neon verified  |
-| DF-007 | Document authentication/session design and permission matrix                                    | DF-006         | Proposed                                     |
+| DF-007 | Document authentication/session design and permission matrix                                    | DF-006         | Design complete; PR pending, not merged      |
 | DF-008 | Implement organization and membership persistence with isolation checks                         | DF-007         | Proposed                                     |
 | DF-009 | Implement registration and password hashing with tests                                          | DF-008         | Proposed                                     |
 | DF-010 | Implement sign-in, sessions, logout, and revocation with tests                                  | DF-009         | Proposed                                     |
