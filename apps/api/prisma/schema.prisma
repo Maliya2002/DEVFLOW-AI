@@ -1,7 +1,7 @@
 generator client {
-  provider = "prisma-client"
-  output = "../src/generated/prisma"
-  moduleFormat = "esm"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
   importFileExtension = "js"
 }
 
@@ -9,4 +9,78 @@ datasource db {
   provider = "postgresql"
 }
 
-// Domain models and their reviewed migrations begin in DF-008.
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum OrganizationStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum MembershipStatus {
+  ACTIVE
+  SUSPENDED
+  REMOVED
+}
+
+enum OrganizationRole {
+  ADMIN
+  HR
+  PROJECT_MANAGER
+  EMPLOYEE
+  VIEWER
+}
+
+model User {
+  id              String       @id @default(uuid()) @db.Uuid
+  normalizedEmail String       @unique @db.VarChar(254)
+  displayName     String       @db.VarChar(100)
+  status          UserStatus   @default(ACTIVE)
+  emailVerifiedAt DateTime?    @db.Timestamptz(3)
+  passwordHash    String?      @db.Text
+  authVersion     Int          @default(0)
+  createdAt       DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime     @updatedAt @db.Timestamptz(3)
+  memberships     Membership[]
+}
+
+model Organization {
+  id                String             @id @default(uuid()) @db.Uuid
+  name              String             @db.VarChar(100)
+  status            OrganizationStatus @default(ACTIVE)
+  ownerMembershipId String             @db.Uuid
+  createdAt         DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime           @updatedAt @db.Timestamptz(3)
+  owner             Membership         @relation("OrganizationOwner", fields: [id, ownerMembershipId], references: [organizationId, id], onDelete: NoAction, onUpdate: NoAction)
+  memberships       Membership[]       @relation("OrganizationMembers")
+}
+
+model Membership {
+  id                 String                  @id @default(uuid()) @db.Uuid
+  organizationId     String                  @db.Uuid
+  userId             String                  @db.Uuid
+  status             MembershipStatus        @default(ACTIVE)
+  createdAt          DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime                @updatedAt @db.Timestamptz(3)
+  organization       Organization            @relation("OrganizationMembers", fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  user               User                    @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  ownedOrganizations Organization[]          @relation("OrganizationOwner")
+  roles              OrganizationRoleGrant[]
+
+  @@unique([organizationId, userId])
+  @@unique([organizationId, id])
+  @@index([userId, status])
+}
+
+model OrganizationRoleGrant {
+  id             String           @id @default(uuid()) @db.Uuid
+  organizationId String           @db.Uuid
+  membershipId   String           @db.Uuid
+  role           OrganizationRole
+  createdAt      DateTime         @default(now()) @db.Timestamptz(3)
+  membership     Membership       @relation(fields: [organizationId, membershipId], references: [organizationId, id], onDelete: Restrict, onUpdate: NoAction)
+
+  @@unique([organizationId, membershipId, role])
+}

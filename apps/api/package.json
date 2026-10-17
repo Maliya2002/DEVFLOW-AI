@@ -10,7 +10,9 @@
     "test": "npm run build && node --experimental-vm-modules ../../node_modules/jest/bin/jest.js --runInBand",
     "db:generate": "node --env-file-if-exists=.env ../../node_modules/prisma/build/index.js generate",
     "db:validate": "node --env-file-if-exists=.env ../../node_modules/prisma/build/index.js validate",
-    "db:check": "npm run build && node --env-file-if-exists=.env dist/database/check.js"
+    "db:check": "npm run build && node --env-file-if-exists=.env dist/database/check.js",
+    "db:deploy": "node --env-file-if-exists=.env ../../node_modules/prisma/build/index.js migrate deploy",
+    "db:status": "node --env-file-if-exists=.env ../../node_modules/prisma/build/index.js migrate status"
   },
   "dependencies": {
     "@nestjs/common": "12.1.3",
