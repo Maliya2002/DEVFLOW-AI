@@ -17,6 +17,8 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [Frontend setup, interactions, and design](docs/FRONTEND.md)
 - [Quality checks and CI](docs/QUALITY.md)
 - [Neon database setup and Prisma](docs/DATABASE.md)
+- [Authentication and session design](docs/AUTHENTICATION.md)
+- [Organization permission matrix](docs/AUTHORIZATION.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)
 
