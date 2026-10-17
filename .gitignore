@@ -24,3 +24,5 @@ tmp/
 .cache/
 .DS_Store
 Thumbs.db
+
+apps/api/src/generated/

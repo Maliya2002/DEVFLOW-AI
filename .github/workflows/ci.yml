@@ -18,7 +18,22 @@ jobs:
     name: Quality, tests, and builds
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: devflow_test
+          POSTGRES_PASSWORD: ci_only_password
+          POSTGRES_DB: devflow_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U devflow_test -d devflow_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     env:
+      TEST_DATABASE_URL: postgresql://devflow_test:ci_only_password@127.0.0.1:5432/devflow_test?sslmode=disable
       CI: 'true'
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
@@ -35,6 +50,8 @@ jobs:
         run: npm install --global npm@11.18.0 --ignore-scripts
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
+      - name: Validate Prisma schema
+        run: npm run db:validate
       - name: Check formatting, lint, and types
         run: npm run check
       - name: Build API and run integration tests

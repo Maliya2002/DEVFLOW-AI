@@ -16,3 +16,5 @@ tmp/
 # Preserve the supplied requirements verbatim and framework-managed instructions.
 docs/MASTER_REQUIREMENTS.md
 apps/web/AGENTS.md
+
+apps/api/src/generated/
