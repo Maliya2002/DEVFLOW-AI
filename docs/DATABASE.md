@@ -49,3 +49,7 @@ References: [Prisma client generator](https://www.prisma.io/docs/orm/v7/prisma-s
 Local verification on 2026-10-16: dependency installation reported zero vulnerabilities; Prisma generation/schema validation, formatting, lint, and both workspace type checks passed. API tests passed 35 tests; the one live PostgreSQL test was explicitly skipped because TEST_DATABASE_URL was absent. Neon connectivity remains pending account/project configuration.
 
 GitHub Actions run 38855743478 passed for implementation commit a92178a: the real PostgreSQL integration test, API suite, frontend production build, dependency audit, and desktop/mobile Chromium suite all succeeded. This validates PostgreSQL integration, not a Neon cloud connection.
+
+## Neon connection verification: 2026-10-17
+
+The user-created development project `devflow-ai-dev` in Singapore was connected using its existing default branch. Corrected the locally pasted URL into the DATABASE_URL assignment in the ignored API environment file. Both the pooled runtime endpoint and corresponding direct endpoint passed read-only SELECT 1 probes with verified TLS. A temporary Nest API server returned HTTP 200 for liveness and database readiness, with Cache-Control: no-store, then shut down cleanly. No domain tables or migrations were created. Credentials remain exclusively in the ignored local environment file. This completes the previously pending cloud connection step; earlier pending statements above describe the historical verification state.
