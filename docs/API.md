@@ -67,3 +67,7 @@ Frontend, database, auth, readiness checks, DTO validation for future writes, ra
 - The scoped override successfully loaded a YAML fixture through Istanbul's actual config loader.
 - npm dependency resolution and diff whitespace checks passed. After updating the affected resolution, npm audit reported zero vulnerabilities.
 - Verification is local on Windows; CI and other operating systems have not yet been tested.
+
+## Registration backend
+
+DF-009 adds `POST /api/v1/auth/register`, origin protection, strict validation, bounded password hashing and shared database rate limits. See [registration setup and verification](REGISTRATION.md). Sessions, email delivery and browser registration remain planned.
