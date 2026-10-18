@@ -16,6 +16,6 @@ import { ReadinessController } from './readiness.controller.js';
     DatabaseService,
   ],
   controllers: [ReadinessController],
-  exports: [DatabaseService],
+  exports: [DatabaseService, DATABASE_CLIENT],
 })
 export class DatabaseModule {}

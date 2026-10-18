@@ -18,6 +18,7 @@ export default defineConfig([
     'tmp/**',
     'apps/api/src/generated/**',
     '.cache/**',
+    '.freebuff/**',
   ]),
   {
     files: ['**/*.{js,mjs,cjs}'],

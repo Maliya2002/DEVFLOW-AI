@@ -23,7 +23,7 @@ This public endpoint reports API liveness only. It does not claim database conne
 
 ## Configuration
 
-The process reads `PORT` (integer 1–65535, default 3001) and `HOST` (default 127.0.0.1) from the environment. Invalid ports fail startup. There is no automatic `.env` loader yet. For example in PowerShell:
+The process reads `PORT` (integer 1–65535, default 3001) and `HOST` (default 127.0.0.1) from the environment. Invalid ports fail startup. `start:api` loads the ignored `apps/api/.env` with Node’s environment-file support. For example in PowerShell:
 
 ```powershell
 $env:PORT = '3101'

@@ -2,7 +2,7 @@
 
 A planned remote software-team platform connecting project delivery, transparent work records, collaboration, GitHub workflows, and evidence-grounded insights.
 
-**Status:** Next.js workspace explorer and NestJS liveness API. The frontend includes a responsive workbench, interactive capability map, and real service connection check. Authentication, database persistence, and business workflows are not implemented yet.
+**Status:** Next.js workspace explorer and NestJS liveness API. The frontend includes a responsive workbench, interactive capability map, and real service connection check. PostgreSQL identity/organization persistence and the registration backend are implemented. Sign-in, verification delivery, authentication UI, and business workflows remain planned.
 
 The first goal is a working job-portfolio release. A later company pilot requires separate operational and security verification before using real employee data.
 
@@ -20,6 +20,7 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [Authentication and session design](docs/AUTHENTICATION.md)
 - [Organization permission matrix](docs/AUTHORIZATION.md)
 - [Identity and organization persistence](docs/IDENTITY_PERSISTENCE.md)
+- [Registration backend and verification](docs/REGISTRATION.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)
 
