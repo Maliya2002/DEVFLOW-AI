@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { Inject, Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { DATABASE_CLIENT } from '../database/database.service.js';
 import type { PrismaClient } from '../generated/prisma/client.js';
@@ -44,24 +45,22 @@ export class RegistrationService {
     const passwordHash = await this.hasher.hash(input.password);
     try {
       await this.db.$transaction(async (tx) => {
-        await tx.user.create({
-          data: {
-            normalizedEmail: input.email,
-            displayName: input.displayName,
-            passwordHash,
-            securityEvents: { create: { action: 'REGISTRATION_CREATED' } },
-          },
-        });
+        // Resolve only this named unique field in PostgreSQL, without adapter-specific error metadata.
+        const id = randomUUID();
+        const created = await tx.$queryRaw<{ id: string }[]>`
+          INSERT INTO "User" ("id", "normalizedEmail", "displayName", "passwordHash", "updatedAt")
+          VALUES (${id}::uuid, ${input.email}, ${input.displayName}, ${passwordHash}, CURRENT_TIMESTAMP)
+          ON CONFLICT ("normalizedEmail") DO NOTHING
+          RETURNING "id"
+        `;
+        if (created.length) {
+          await tx.authSecurityEvent.create({
+            data: { userId: id, action: 'REGISTRATION_CREATED' },
+          });
+        }
       });
-    } catch (error) {
-      // Only the email uniqueness conflict is an accepted duplicate.
-      const conflict = error as { code?: string; meta?: { target?: string[]; modelName?: string } };
-      if (
-        conflict.code !== 'P2002' ||
-        conflict.meta?.modelName !== 'User' ||
-        !conflict.meta?.target?.includes('normalizedEmail')
-      )
-        throw new ServiceUnavailableException('Registration is unavailable.');
+    } catch {
+      throw new ServiceUnavailableException('Registration is unavailable.');
     }
     return REGISTRATION_ACCEPTED;
   }
