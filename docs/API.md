@@ -23,7 +23,7 @@ This public endpoint reports API liveness only. It does not claim database conne
 
 ## Configuration
 
-The process reads `PORT` (integer 1–65535, default 3001) and `HOST` (default 127.0.0.1) from the environment. Invalid ports fail startup. There is no automatic `.env` loader yet. For example in PowerShell:
+The process reads `PORT` (integer 1–65535, default 3001) and `HOST` (default 127.0.0.1) from the environment. Invalid ports fail startup. `start:api` loads the ignored `apps/api/.env` with Node’s environment-file support. For example in PowerShell:
 
 ```powershell
 $env:PORT = '3101'
@@ -67,3 +67,7 @@ Frontend, database, auth, readiness checks, DTO validation for future writes, ra
 - The scoped override successfully loaded a YAML fixture through Istanbul's actual config loader.
 - npm dependency resolution and diff whitespace checks passed. After updating the affected resolution, npm audit reported zero vulnerabilities.
 - Verification is local on Windows; CI and other operating systems have not yet been tested.
+
+## Registration backend
+
+DF-009 adds `POST /api/v1/auth/register`, origin protection, strict validation, bounded password hashing and shared database rate limits. See [registration setup and verification](REGISTRATION.md). Sessions, email delivery and browser registration remain planned.

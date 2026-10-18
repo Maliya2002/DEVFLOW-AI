@@ -11,6 +11,7 @@ node_modules/
 package-lock.json
 tmp/
 .cache/
+.freebuff/
 .env*
 **/.env*
 # Preserve the supplied requirements verbatim and framework-managed instructions.
