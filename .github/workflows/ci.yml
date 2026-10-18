@@ -34,6 +34,7 @@ jobs:
           --health-retries 10
     env:
       TEST_DATABASE_URL: postgresql://devflow_test:ci_only_password@127.0.0.1:5432/devflow_test?sslmode=disable
+      DIRECT_URL: postgresql://devflow_test:ci_only_password@127.0.0.1:5432/devflow_test?sslmode=disable
       CI: 'true'
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
@@ -54,6 +55,10 @@ jobs:
         run: npm run db:validate
       - name: Check formatting, lint, and types
         run: npm run check
+      - name: Apply migrations to disposable PostgreSQL
+        run: npm run db:deploy
+      - name: Verify migration status
+        run: npm run db:status
       - name: Build API and run integration tests
         run: npm run test:api
       - name: Build frontend

@@ -53,3 +53,7 @@ GitHub Actions run 38855743478 passed for implementation commit a92178a: the rea
 ## Neon connection verification: 2026-10-17
 
 The user-created development project `devflow-ai-dev` in Singapore was connected using its existing default branch. Corrected the locally pasted URL into the DATABASE_URL assignment in the ignored API environment file. Both the pooled runtime endpoint and corresponding direct endpoint passed read-only SELECT 1 probes with verified TLS. A temporary Nest API server returned HTTP 200 for liveness and database readiness, with Cache-Control: no-store, then shut down cleanly. No domain tables or migrations were created. Credentials remain exclusively in the ignored local environment file. This completes the previously pending cloud connection step; earlier pending statements above describe the historical verification state.
+
+## DF-008 schema update: 2026-10-18
+
+The first identity/organization migration is now applied to the Neon development database and migration status is current. See [identity persistence](IDENTITY_PERSISTENCE.md) for its schema, constraints and verification. Earlier statements about an empty schema describe the DF-006 baseline.
