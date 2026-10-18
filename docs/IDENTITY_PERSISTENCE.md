@@ -41,3 +41,9 @@ CI supplies a disposable PostgreSQL database and DIRECT_URL, applies migrations,
 ## Acceptance and verification
 
 The integration suite covers atomic creation and safe projections; cross-tenant selectors; disabled/unverified users; name validation; concurrent duplicate email creation; database normalization checks; duplicate memberships/grants; cross-tenant role and owner links; rollback with missing owner; inactive owner rejection; suspended/removed memberships; archived organizations; and fresh user-state checks. Existing health and readiness tests remain intact. CI verifies migration deployment against real PostgreSQL and then frontend/browser compatibility. Neon migration application and current test results are recorded below after execution.
+
+## Verification record: 2026-10-18
+
+Implementation commit `3d14242` passed GitHub Actions run `39045642569`: migration deployment/status, all 50 API tests (including the 15 live PostgreSQL tests), frontend production build, dependency audit and all 20 desktop/mobile Chromium tests. Local formatting/lint/type checks passed; the local API run passed 35 tests with 15 database tests explicitly skipped.
+
+Applied `202610170001_identity_organizations` to the configured Neon development database after CI succeeded. `npm run db:status` reports the schema up to date. Read-only inventory confirmed User, Organization, Membership, OrganizationRoleGrant and Prisma migration history tables; user/organization/membership counts were all zero. No synthetic fixtures or account credentials were inserted into Neon. PR #8 remains open and unmerged.
