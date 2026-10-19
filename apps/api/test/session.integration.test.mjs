@@ -170,6 +170,16 @@ integration('Session persistence, isolation and concurrency', () => {
     await service.logout(null);
     await expect(service.current(result.token)).rejects.toThrow();
   });
+  it('revokes a disabled account session before clearing it, preventing later revival', async () => {
+    const f = await fixture(),
+      result = await f.login();
+    await db.user.update({ where: { id: f.user.id }, data: { status: 'DISABLED' } });
+    await service.logout(result.token);
+    expect((await row(result.token)).revokedAt).not.toBeNull();
+    await db.user.update({ where: { id: f.user.id }, data: { status: 'ACTIVE' } });
+    await expect(service.current(result.token)).rejects.toThrow('Authentication failed');
+  });
+
   it('requires recent authentication for logout-all and records denial', async () => {
     const f = await fixture(),
       result = await f.login();

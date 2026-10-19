@@ -270,19 +270,22 @@ export class SessionService {
   }
 
   async logout(token: string | null) {
-    if (!token) return;
-    try {
-      await this.withSession(
-        token,
-        async (tx, { user, session, now }) => {
-          await tx.authSession.update({ where: { id: session.id }, data: { revokedAt: now } });
-          await this.audit(tx, user.id, 'LOGOUT', session.id);
-        },
-        false,
-      );
-    } catch (error) {
-      if (!(error instanceof UnauthorizedException)) throw error;
-    }
+    if (!token || !/^[A-Za-z0-9_-]{43}$/.test(token)) return;
+    await this.safe((db) =>
+      db.$transaction(async (tx) => {
+        const session = await tx.authSession.findUnique({
+          where: { tokenDigest: tokenDigest(token) },
+        });
+        if (!session) return;
+        await tx.$queryRaw`SELECT "id" FROM "User" WHERE "id" = ${session.userId}::uuid FOR UPDATE`;
+        // Revoke even a disabled/expired session; account reactivation must not undo logout.
+        const result = await tx.authSession.updateMany({
+          where: { id: session.id, revokedAt: null },
+          data: { revokedAt: this.clock() },
+        });
+        if (result.count) await this.audit(tx, session.userId, 'LOGOUT', session.id);
+      }),
+    );
   }
 
   async logoutAll(token: string | null) {
