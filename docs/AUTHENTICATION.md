@@ -1,6 +1,6 @@
 # DF-007: authentication and session design
 
-Status: implementation contract, 2026-10-17. This milestone adds documentation only. DF-009 implements the registration backend; see [registration](REGISTRATION.md) for current behavior and limitations. Sessions and email delivery remain planned, and the current overview remains a public foundation preview. Read alongside [authorization](AUTHORIZATION.md) and [database setup](DATABASE.md).
+Status: implementation contract, 2026-10-17. This milestone adds documentation only. DF-009 implements the registration backend; see [registration](REGISTRATION.md) for current behavior and limitations. DF-010 implements [sessions](SESSIONS.md); email delivery remains planned, and the current overview remains a public foundation preview. Read alongside [authorization](AUTHORIZATION.md) and [database setup](DATABASE.md).
 
 ## Decision and boundaries
 

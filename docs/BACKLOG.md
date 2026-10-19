@@ -15,7 +15,7 @@ The user has authorized autonomous routine progress through the agreed roadmap. 
 | DF-007 | Document authentication/session design and permission matrix                                    | DF-006         | Design complete; PR #7 open, not merged      |
 | DF-008 | Implement organization and membership persistence with isolation checks                         | DF-007         | Completed; PR #8 open; CI/Neon verified      |
 | DF-009 | Implement registration and password hashing with tests                                          | DF-008         | Completed; PR #9 open; CI/Neon verified      |
-| DF-010 | Implement sign-in, sessions, logout, and revocation with tests                                  | DF-009         | Proposed                                     |
+| DF-010 | Implement sign-in, sessions, logout, and revocation with tests                                  | DF-009         | Implemented; verification in progress        |
 | DF-011 | Implement email verification through a provider adapter                                         | DF-010         | Proposed                                     |
 | DF-012 | Implement password reset/change and required session invalidation                               | DF-011         | Proposed                                     |
 | DF-013 | Implement organization onboarding and invitation workflow                                       | DF-012         | Proposed                                     |

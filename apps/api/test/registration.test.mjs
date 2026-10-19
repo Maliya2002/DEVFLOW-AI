@@ -81,7 +81,7 @@ describe('Registration policy', () => {
   it('bounds hash admission and recovers capacity after completion', async () => {
     const hasher = new PasswordHasher();
     const pending = Array.from({ length: 10 }, () => hasher.hash(input.password));
-    await expect(hasher.hash(input.password)).rejects.toThrow('Registration is busy');
+    await expect(hasher.hash(input.password)).rejects.toThrow('Authentication is busy');
     await Promise.all(pending);
     await expect(hasher.hash(input.password)).resolves.toMatch(/^\$argon2id/);
   }, 15000);
