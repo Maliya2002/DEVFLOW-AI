@@ -70,4 +70,4 @@ Frontend, database, auth, readiness checks, DTO validation for future writes, ra
 
 ## Registration backend
 
-DF-009 adds `POST /api/v1/auth/register`, origin protection, strict validation, bounded password hashing and shared database rate limits. See [registration setup and verification](REGISTRATION.md). Sessions, email delivery and browser registration remain planned.
+DF-009 adds `POST /api/v1/auth/register`, origin protection, strict validation, bounded password hashing and shared database rate limits. See [registration setup and verification](REGISTRATION.md). DF-010 adds [sign-in and session lifecycle](SESSIONS.md). Email delivery and browser registration remain planned.
