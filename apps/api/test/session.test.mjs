@@ -6,11 +6,26 @@ import { SessionService } from '../dist/auth/session.service.js';
 import { AuthThrottled } from '../dist/auth/login-rate-limiter.js';
 import { sessionCookie, readSessionCookie } from '../dist/auth/session-http.js';
 import { PasswordHasher, DUMMY_PASSWORD_HASH } from '../dist/auth/password-hasher.js';
-import { loginInput, parseInput } from '../dist/auth/session-input.js';
+import { loginInput, passwordChangeInput, parseInput } from '../dist/auth/session-input.js';
 
 const config = { origin: 'http://127.0.0.1:3000', rateSecret: 'a'.repeat(64) };
 const token = 'a'.repeat(43);
 describe('Session primitives', () => {
+  it('uses the registration password policy for changes without trimming credentials', () => {
+    const input = { currentPassword: 'old', newPassword: '  ocean lantern café 927!  ' };
+    expect(parseInput(passwordChangeInput, input)).toEqual(input);
+    for (const changes of [
+      { newPassword: 'short' },
+      { newPassword: 'a'.repeat(20) },
+      { currentPassword: input.newPassword },
+      { role: 'ADMIN' },
+      { currentPassword: '\ud800' },
+    ]) {
+      expect(() => parseInput(passwordChangeInput, { ...input, ...changes })).toThrow(
+        'Invalid authentication details',
+      );
+    }
+  });
   it('uses host-only HttpOnly cookies with explicit persistence and matching deletion', () => {
     expect(sessionCookie(config, token)).toBe(
       `devflow_session=${token}; Path=/; HttpOnly; SameSite=Lax`,
@@ -110,7 +125,7 @@ describe('Session HTTP contracts', () => {
     expect(result.headers['set-cookie'][0]).toContain('HttpOnly');
     expect(JSON.stringify(result.body)).not.toContain(token);
   });
-  it.each(['login', 'reauthenticate', 'logout', 'logout-all'])(
+  it.each(['login', 'reauthenticate', 'logout', 'logout-all', 'password/change'])(
     'requires origin checks for %s',
     async (path) => {
       await mutation(path).set('Origin', 'https://foreign.example').send({}).expect(403);
@@ -118,6 +133,21 @@ describe('Session HTTP contracts', () => {
       await mutation(path).type('form').send({}).expect(415);
     },
   );
+  it('clears the cookie only after a committed password change, without auto-login', async () => {
+    const spy = jest.spyOn(service, 'changePassword').mockResolvedValue(undefined);
+    const input = { currentPassword: 'old', newPassword: 'new mountain river 492!' };
+    const result = await mutation('password/change')
+      .set('Cookie', `devflow_session=${token}`)
+      .send(input)
+      .expect(204)
+      .expect('Cache-Control', 'no-store');
+    expect(spy).toHaveBeenCalledWith(token, input, expect.any(String));
+    expect(result.headers['set-cookie'][0]).toContain('Max-Age=0');
+    expect(result.text).toBe('');
+    spy.mockRejectedValue(new ServiceUnavailableException('Authentication is unavailable.'));
+    const failure = await mutation('password/change').send(input).expect(503);
+    expect(failure.headers['set-cookie']).toBeUndefined();
+  });
   it('checks CSRF on session deletion too', async () => {
     await mutation('sessions/00000000-0000-4000-8000-000000000000', 'delete')
       .unset('Origin')

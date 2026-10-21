@@ -315,6 +315,189 @@ integration('Session persistence, isolation and concurrency', () => {
       (await db.authRateBucket.findUniqueOrThrow({ where: { keyDigest: admitted.key } })).hits,
     ).toBe(1);
   });
+  it('changes the password atomically, revokes every own session and preserves other accounts', async () => {
+    const f = await fixture(),
+      other = await fixture();
+    const first = await f.login(),
+      second = await f.login(),
+      foreign = await other.login();
+    const newPassword = '  ocean lantern café 927!  ';
+    await service.changePassword(first.token, { currentPassword: password, newPassword }, f.ip);
+    const user = await db.user.findUniqueOrThrow({ where: { id: f.user.id } });
+    expect(user.authVersion).toBe(1);
+    expect(await verify(user.passwordHash, newPassword)).toBe(true);
+    expect(await verify(user.passwordHash, newPassword.trim())).toBe(false);
+    for (const token of [first.token, second.token])
+      await expect(service.current(token)).rejects.toThrow('Authentication failed');
+    expect((await service.current(foreign.token)).user.id).toBe(other.user.id);
+    await expect(f.login()).rejects.toThrow('Authentication failed');
+    await expect(
+      service.login({ email: f.input.email, password: newPassword }, f.ip, null),
+    ).resolves.toBeDefined();
+    expect(
+      await db.authSecurityEvent.count({
+        where: { userId: f.user.id, action: 'PASSWORD_CHANGED' },
+      }),
+    ).toBe(1);
+  });
+  it('denies wrong current passwords and shares the account guessing budget', async () => {
+    const f = await fixture(),
+      first = await f.login();
+    const input = { currentPassword: 'incorrect', newPassword: 'new mountain river 492!' };
+    for (let i = 0; i < 5; i++)
+      await expect(service.changePassword(first.token, input, f.ip)).rejects.toThrow(
+        'Authentication failed',
+      );
+    await expect(service.changePassword(first.token, input, f.ip)).rejects.toThrow(
+      'Too many authentication requests',
+    );
+    expect((await db.user.findUniqueOrThrow({ where: { id: f.user.id } })).passwordHash).toBe(hash);
+    expect((await service.current(first.token)).user.id).toBe(f.user.id);
+  });
+  it('requires recent authentication before spending hash work', async () => {
+    const f = await fixture(),
+      first = await f.login();
+    now += 5 * 60000;
+    const hashSpy = jest.spyOn(hasher, 'hash');
+    await expect(
+      service.changePassword(
+        first.token,
+        { currentPassword: password, newPassword: 'new mountain river 492!' },
+        f.ip,
+      ),
+    ).rejects.toThrow('Recent password authentication');
+    expect(hashSpy).not.toHaveBeenCalled();
+    expect(
+      await db.authSecurityEvent.count({ where: { userId: f.user.id, action: 'SECURITY_DENIED' } }),
+    ).toBe(1);
+  });
+  it('denies password changes for disabled users', async () => {
+    const f = await fixture(),
+      first = await f.login();
+    await db.user.update({ where: { id: f.user.id }, data: { status: 'DISABLED' } });
+    await expect(
+      service.changePassword(
+        first.token,
+        { currentPassword: password, newPassword: 'new mountain river 492!' },
+        f.ip,
+      ),
+    ).rejects.toThrow('Authentication failed');
+  });
+  it('concurrent password changes have one winner', async () => {
+    const f = await fixture(),
+      first = await f.login();
+    const results = await Promise.allSettled(
+      ['new mountain river 492!', 'another forest ocean 528!'].map((newPassword) =>
+        service.changePassword(first.token, { currentPassword: password, newPassword }, f.ip),
+      ),
+    );
+    expect(results.filter((r) => r.status === 'fulfilled')).toHaveLength(1);
+    expect(results.filter((r) => r.status === 'rejected')).toHaveLength(1);
+    expect((await db.user.findUniqueOrThrow({ where: { id: f.user.id } })).authVersion).toBe(1);
+  });
+  it('audit failure rolls back the password, version and session revocation', async () => {
+    const f = await fixture(),
+      first = await f.login();
+    jest.spyOn(service, 'audit').mockRejectedValue(new Error('audit failed'));
+    await expect(
+      service.changePassword(
+        first.token,
+        { currentPassword: password, newPassword: 'new mountain river 492!' },
+        f.ip,
+      ),
+    ).rejects.toThrow('Authentication is unavailable');
+    const user = await db.user.findUniqueOrThrow({ where: { id: f.user.id } });
+    expect(user.passwordHash).toBe(hash);
+    expect(user.authVersion).toBe(0);
+    expect((await row(first.token)).revokedAt).toBeNull();
+  });
+  it.each(['revoked', 'expired-reauth'])(
+    'rechecks %s after hashing outside the transaction',
+    async (condition) => {
+      const f = await fixture(),
+        first = await f.login();
+      const original = hasher.hash.bind(hasher);
+      let entered, release;
+      const started = new Promise((resolve) => {
+        entered = resolve;
+      });
+      const gate = new Promise((resolve) => {
+        release = resolve;
+      });
+      jest.spyOn(hasher, 'hash').mockImplementationOnce(async (value) => {
+        entered();
+        await gate;
+        return original(value);
+      });
+      const change = service.changePassword(
+        first.token,
+        { currentPassword: password, newPassword: 'new mountain river 492!' },
+        f.ip,
+      );
+      const denied = expect(change).rejects.toThrow(
+        condition === 'revoked' ? 'Authentication failed' : 'Recent password authentication',
+      );
+      await started;
+      try {
+        if (condition === 'revoked') await service.logoutAll(first.token);
+        else now += 5 * 60000;
+      } finally {
+        release();
+      }
+      await denied;
+      expect((await db.user.findUniqueOrThrow({ where: { id: f.user.id } })).passwordHash).toBe(
+        hash,
+      );
+    },
+  );
+  it('a login that verified the old password cannot issue a session after password change', async () => {
+    const f = await fixture(),
+      first = await f.login();
+    const original = hasher.verify.bind(hasher);
+    let entered, release;
+    const started = new Promise((resolve) => {
+      entered = resolve;
+    });
+    const gate = new Promise((resolve) => {
+      release = resolve;
+    });
+    jest.spyOn(hasher, 'verify').mockImplementationOnce(async (...args) => {
+      const result = await original(...args);
+      entered();
+      await gate;
+      return result;
+    });
+    const login = f.login();
+    const denied = expect(login).rejects.toThrow('Authentication failed');
+    await started;
+    try {
+      await service.changePassword(
+        first.token,
+        { currentPassword: password, newPassword: 'new mountain river 492!' },
+        f.ip,
+      );
+    } finally {
+      release();
+    }
+    await denied;
+    expect(await db.authSession.count({ where: { userId: f.user.id, revokedAt: null } })).toBe(0);
+  });
+  it('a failed quota refund does not report a committed password change as failed', async () => {
+    const f = await fixture(),
+      first = await f.login();
+    jest
+      .spyOn(LoginRateLimiter.prototype, 'releaseSuccess')
+      .mockRejectedValue(new Error('quota unavailable'));
+    await expect(
+      service.changePassword(
+        first.token,
+        { currentPassword: password, newPassword: 'new mountain river 492!' },
+        f.ip,
+      ),
+    ).resolves.toBeUndefined();
+    expect((await row(first.token)).revokedAt).not.toBeNull();
+  });
+
   it('cleans retained expired sessions and old audits without deleting current records', async () => {
     const f = await fixture(),
       first = await f.login(),

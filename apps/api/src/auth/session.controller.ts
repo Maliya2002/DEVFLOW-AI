@@ -74,6 +74,15 @@ export class SessionController {
     });
   }
 
+  @Post('password/change')
+  @HttpCode(204)
+  changePassword(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+    return this.handle(request, response, true, async (token) => {
+      await this.sessions.changePassword(token, request.body, this.ip(request));
+      response.setHeader('Set-Cookie', sessionCookie(this.config!, null));
+    });
+  }
+
   @Get('session')
   current(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
     return this.handle(request, response, false, (token) => this.sessions.current(token));
