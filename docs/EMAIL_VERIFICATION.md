@@ -96,6 +96,15 @@ on 2026-10-20.
 Branch: codex/DF-011-verification-tokens, stacked on the provider adapter PR #11.
 Scope: token persistence, request/confirm HTTP routes, quotas, audit and cleanup.
 On 2026-10-22, npm run check passed; npm run test:api passed 118 tests with
-63 disposable-database tests skipped locally. Final cleanup changes passed
-targeted formatting/lint; database CI verification is pending. No live email
-test or production deployment is included.
+63 disposable-database tests skipped locally. [CI run 39663350872](https://github.com/Maliya2002/DEVFLOW-AI/actions/runs/39663350872)
+passed all 181 API tests, including 63 database tests, and 20 browser tests on
+code commit 0e8e524. Prisma migrations/validation, formatting, lint, types,
+frontend build and dependency audit also passed.
+
+Development Neon migration 202610200001_email_verification was applied and
+db:status confirmed all four migrations are current. Initial connection attempts
+failed/timed out; read-only checks succeeded on retry before applying the migration.
+No synthetic users were added to Neon, and no live email was sent.
+
+Published as [PR #12](https://github.com/Maliya2002/DEVFLOW-AI/pull/12), unmerged.
+Live delivery, its public-activation hardening, and the landing page remain pending.
