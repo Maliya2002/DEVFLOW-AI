@@ -4,6 +4,13 @@ import type { PrismaClient } from '../generated/prisma/client.js';
 export async function cleanupAuthHistory(db: PrismaClient, now = new Date()) {
   const sessionCutoff = new Date(now.getTime() - 7 * 86400000);
   const auditCutoff = new Date(now.getTime() - 30 * 86400000);
+  const verificationTokens = await db.$executeRaw`
+    DELETE FROM "EmailVerificationToken" WHERE "id" IN (
+      SELECT "id" FROM "EmailVerificationToken" WHERE "expiresAt" <= ${now}
+        OR "consumedAt" <= ${now} OR "invalidatedAt" <= ${now}
+      LIMIT 500 FOR UPDATE SKIP LOCKED
+    )
+  `;
   const sessions = await db.$executeRaw`
     DELETE FROM "AuthSession" WHERE "id" IN (
       SELECT "id" FROM "AuthSession" WHERE "revokedAt" < ${sessionCutoff}
@@ -23,5 +30,5 @@ export async function cleanupAuthHistory(db: PrismaClient, now = new Date()) {
       LIMIT 500 FOR UPDATE SKIP LOCKED
     )
   `;
-  return { sessions, events, rateBuckets };
+  return { sessions, events, rateBuckets, verificationTokens };
 }
