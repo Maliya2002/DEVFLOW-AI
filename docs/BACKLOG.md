@@ -17,7 +17,7 @@ The user has authorized autonomous routine progress through the agreed roadmap. 
 | DF-009 | Implement registration and password hashing with tests                                          | DF-008         | Completed; PR #9 open; CI/Neon verified              |
 | DF-010 | Implement sign-in, sessions, logout, and revocation with tests                                  | DF-009         | Completed; PR #10 open; CI/Neon verified             |
 | DF-011 | Implement email verification through a provider adapter                                         | DF-010         | Backend CI/Neon verified; PR #12; activation pending |
-| DF-012 | Implement password reset/change and required session invalidation                               | DF-011         | Proposed                                             |
+| DF-012 | Implement password reset/change and required session invalidation                               | DF-011         | In progress: password change; reset pending          |
 | DF-013 | Implement organization onboarding and invitation workflow                                       | DF-012         | Proposed                                             |
 | DF-014 | Connect authentication UI and protected workspace flows                                         | DF-013, DF-004 | Proposed                                             |
 | DF-015 | Verify foundation end-to-end, permissions, and documentation                                    | DF-014, DF-005 | Proposed                                             |

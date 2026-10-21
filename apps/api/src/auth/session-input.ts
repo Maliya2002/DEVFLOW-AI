@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { toUSVString } from 'node:util';
 import { z } from 'zod';
+import { newPassword } from './password-policy.js';
 const password = z
   .string()
   .refine(
@@ -12,6 +13,9 @@ export const loginInput = z.strictObject({
   rememberMe: z.boolean().default(false),
 });
 export const reauthInput = z.strictObject({ password });
+export const passwordChangeInput = z
+  .strictObject({ currentPassword: password, newPassword })
+  .refine((value) => value.currentPassword !== value.newPassword);
 export const emptyInput = z.strictObject({});
 export const sessionIdInput = z.uuid();
 export function parseInput<T>(schema: z.ZodType<T>, body: unknown): T {

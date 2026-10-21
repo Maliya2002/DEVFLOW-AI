@@ -22,6 +22,7 @@ The first goal is a working job-portfolio release. A later company pilot require
 - [Identity and organization persistence](docs/IDENTITY_PERSISTENCE.md)
 - [Registration backend and verification](docs/REGISTRATION.md)
 - [Email verification backend and activation gates](docs/EMAIL_VERIFICATION.md)
+- [Password security milestones](docs/PASSWORDS.md)
 - [Sign-in and session lifecycle](docs/SESSIONS.md)
 - [Original product requirements](docs/MASTER_REQUIREMENTS.md)
 - [Agent collaboration rules](AGENTS.md)

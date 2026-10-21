@@ -13,7 +13,7 @@ import type { PrismaClient, Prisma, User, AuthSession } from '../generated/prism
 import { AUTH_CONFIG, type AuthConfig } from './config.js';
 import { PasswordHasher, DUMMY_PASSWORD_HASH } from './password-hasher.js';
 import { LoginRateLimiter, AuthThrottled } from './login-rate-limiter.js';
-import { loginInput, reauthInput, parseInput } from './session-input.js';
+import { loginInput, reauthInput, passwordChangeInput, parseInput } from './session-input.js';
 
 export const AUTH_CLOCK = Symbol('AUTH_CLOCK');
 const MINUTE = 60_000;
@@ -149,6 +149,68 @@ export class SessionService {
         : null;
       await limiter.releaseSuccess(reservation);
       return this.issue(context.user, token, context.session.rememberMe, true, replacement);
+    });
+  }
+
+  async changePassword(token: string | null, body: unknown, ip: string) {
+    return this.safe(async (db) => {
+      // Share login budgets so changing routes cannot bypass password-guessing limits.
+      const limiter = new LoginRateLimiter(db, this.config!.rateSecret);
+      await limiter.reserve('ip', ip);
+      const input = parseInput(passwordChangeInput, body);
+      const snapshot = await this.withSession(
+        token,
+        async (tx, context) => {
+          if (context.now.getTime() - context.session.reauthenticatedAt.getTime() >= 5 * MINUTE) {
+            await this.audit(tx, context.user.id, 'SECURITY_DENIED', context.session.id);
+            return null;
+          }
+          return context;
+        },
+        false,
+      );
+      if (!snapshot) throw new ForbiddenException('Recent password authentication is required.');
+      const reservation = await limiter.reserve('email', snapshot.user.normalizedEmail);
+      const correct = await this.hasher.verify(
+        snapshot.user.passwordHash ?? DUMMY_PASSWORD_HASH,
+        input.currentPassword,
+      );
+      if (!correct || !snapshot.user.passwordHash) {
+        await this.audit(db, snapshot.user.id, 'REAUTH_FAILED', snapshot.session.id);
+        throw unauthorized();
+      }
+      // Expensive Argon2 work runs outside the transaction and user lock.
+      const passwordHash = await this.hasher.hash(input.newPassword);
+      const changed = await this.withSession(
+        token,
+        async (tx, { user, session, now }) => {
+          if (
+            user.id !== snapshot.user.id ||
+            user.authVersion !== snapshot.user.authVersion ||
+            user.passwordHash !== snapshot.user.passwordHash
+          )
+            throw unauthorized();
+          if (now.getTime() - session.reauthenticatedAt.getTime() >= 5 * MINUTE) {
+            await this.audit(tx, user.id, 'SECURITY_DENIED', session.id);
+            return false;
+          }
+          await tx.user.update({
+            where: { id: user.id },
+            data: { passwordHash, authVersion: { increment: 1 } },
+          });
+          await tx.authSession.updateMany({
+            where: { userId: user.id, revokedAt: null },
+            data: { revokedAt: now },
+          });
+          await this.audit(tx, user.id, 'PASSWORD_CHANGED', session.id);
+          return true;
+        },
+        false,
+      );
+      if (!changed) throw new ForbiddenException('Recent password authentication is required.');
+      // The password mutation is already committed; a quota-refund outage must not
+      // turn a successful credential change into an ambiguous error response.
+      await limiter.releaseSuccess(reservation).catch(() => undefined);
     });
   }
 
